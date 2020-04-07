@@ -1,0 +1,20 @@
+{
+  "name": "node-crawler",
+  "version": "1.0.0",
+  "description": "node.js crawler",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "repository": "git@github.com:ztever/node-crawler.git",
+  "author": "ztever <478081538@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "cheerio-advanced-selectors": "^2.0.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
