@@ -5,8 +5,12 @@ const https = require("https");
 const cheerio = require("cheerio");
 const rp = require("request-promise");
 const Nightmare = require("nightmare"); // 自动化测试包，处理动态页面
-const nightmare = Nightmare({ show: true }); // show:true  显示内置模拟浏览器
-const downloadImages = (url) => {
+const nightmare = Nightmare({ show: false }); // show:true  显示内置模拟浏览器
+
+const baiduImageUrl =
+  "https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1586417271273_R&pv=&ic=&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&ie=utf-8&hs=2&sid=&word=%E6%80%A7%E6%84%9F%E6%B3%B3%E8%A3%85&f=3&oq=%E6%80%A7%E6%84%9F&rsp=0";
+
+const downloadImages = (url, index) => {
   https
     .get(url, (res) => {
       res.setEncoding("binary");
@@ -14,10 +18,9 @@ const downloadImages = (url) => {
       res.on("data", (data) => {
         imgdata += data;
       });
-      const time = new Date().getTime();
       res.on("end", () => {
         fs.writeFile(
-          __dirname + "/images/" + time + ".jpg",
+          __dirname + "/images/" + index + ".jpg",
           imgdata,
           "binary",
           (err) => {
@@ -36,27 +39,31 @@ const downloadImages = (url) => {
 
 const loadPage = async () => {
   nightmare
-    .goto(
-      "https://image.baidu.com/search/index?ct=201326592&z=3&tn=baiduimage&ipn=r&word=美女比基尼&pn=0&istype=2&ie=utf-8&oe=utf-8&cl=2&lm=-1&st=-1&fr=&fmq=1586337792391_R&ic=&se=&sme=&width=0&height=0&face=0&hd=&latest=&copyright="
-    )
-    .wait("div#imgid") //图片加载完成了
+    .goto(baiduImageUrl)
+    // .wait("div#imgid") //图片加载完成了与下面的一个wait等效
     // .wait(() => {
-    //   const wapper = document.querySelector("#wrapper");
-    //   console.log("wapper", wapper);
-    //   const top = wapper.scrollTop;
-    //   console.log("top", top);
-    //   // const imgLength = document.querySelectorAll(".main_img").length;
-    //   // console.log("imgLength", imgLength);
-    //   return true;
+    //   return document.querySelector("div#imgid");
     // })
-    // .scrollTo(10000, 0)
-    // .wait(function () {
-    //   console.log(
-    //     "document.documentElement.scrollTop",
-    //     document.documentElement.scrollTop
-    //   );
-    //   return true;
+    // .wait(() => {
+    // 取出100张图片，不然就模拟网页滚动加载
+    //   const wapper = document.querySelector("html");
+    //   if (document.querySelectorAll(".main_img").length > 100) {
+    //     return true;
+    //   } else {
+    //     wapper.scrollTop = 100000;
+    //     return false;
+    //   }
     // })
+    .scrollTo(100000, 0) //先滚动，下面的wait是判断图片数量够不够100张
+    .wait(function () {
+      const wapper = document.querySelector("html");
+      if (document.querySelectorAll(".main_img").length > 100) {
+        return true;
+      } else {
+        wapper.scrollTop = 100000;
+        return false;
+      }
+    })
     .evaluate(() => document.querySelector("div#imgid").innerHTML)
     .end()
     .then((htmlStr) => {
@@ -77,10 +84,9 @@ const loadPage = async () => {
 
       const $ = cheerio.load(htmlStr);
       const imageList = $(".main_img");
-      console.log("imageList.length", imageList.length);
       imageList.each((index, ele) => {
         const url = $(ele).attr("data-imgurl");
-        downloadImages(url);
+        url && downloadImages(url, index);
       });
     })
     .catch((error) => {
