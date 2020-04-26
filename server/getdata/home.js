@@ -12,7 +12,7 @@ const loadPage = () => {
     .wait(() => {
       content = document.querySelectorAll("#recFloor ul li");
       const wapper = document.querySelector("html");
-      if (content && content.length > 50) {
+      if (content && content.length > 200) {
         return true;
       } else {
         wapper.scrollTop = 1000000;
@@ -96,8 +96,13 @@ const getRecommendForYou = async ($) => {
       ? ele.find(".rec-price-tag").text().trim()
       : "";
     const jump_href = "https:" + $(".j_see_similar").attr("jump-href");
-    const sql = `insert recommend_for_you (title,jd_market,src,price,tags,jump_href) values ('${title}','${jd_market}','${src}','${price}','${tags}','${jump_href}')`;
-    db(sql);
+    if (
+      src !==
+      "https://img10.360buyimg.com/wq/jfs/t24601/190/890984006/4559/731564fc/5b7f9b7bN3ccd29ab.png"
+    ) {
+      const sql = `insert recommend_for_you (title,jd_market,src,price,tags,jump_href) values ('${title}','${jd_market}','${src}','${price}','${tags}','${jump_href}')`;
+      db(sql);
+    }
   });
 };
 
