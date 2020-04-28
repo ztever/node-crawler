@@ -66,6 +66,7 @@ const getHomeRecommend = async ($) => {
       const eles = $(ele);
       const title = eles.find(".graphic-tit").text();
       const spec = eles.find(".graphic-wz").text().trim();
+      const data_color = eles.find(".graphic-tit").attr("data-color");
       let imgSrc = "";
       eles.find("img").each((index3, imgEle) => {
         const src = $(imgEle).attr("init_src") || $(imgEle).attr("src");
@@ -73,7 +74,7 @@ const getHomeRecommend = async ($) => {
       });
       imgSrc = imgSrc.slice(0, imgSrc.length - 1);
       if (spec) {
-        const sql = `insert home_recommend (title,spec,src) values ('${title}','${spec}','${imgSrc}')`;
+        const sql = `insert home_recommend (title,spec,src,data_color) values ('${title}','${spec}','${imgSrc}','${data_color}')`;
         db(sql);
       }
     });
