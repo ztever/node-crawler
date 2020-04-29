@@ -93,6 +93,8 @@ const getRecommendForYou = async ($) => {
     const price =
       ele.find(".similar-product-price .big-price").text().trim() +
       ele.find(".similar-product-price .small-price").text().trim();
+    const plus_price = ele.find(".plus-price").text().trim();
+    console.log("plus_price", plus_price);
     const tags = ele.find(".rec-price-tag")
       ? ele.find(".rec-price-tag").text().trim()
       : "";
@@ -101,7 +103,7 @@ const getRecommendForYou = async ($) => {
       src !==
       "https://img10.360buyimg.com/wq/jfs/t24601/190/890984006/4559/731564fc/5b7f9b7bN3ccd29ab.png"
     ) {
-      const sql = `insert recommend_for_you (title,jd_market,src,price,tags,jump_href) values ('${title}','${jd_market}','${src}','${price}','${tags}','${jump_href}')`;
+      const sql = `insert recommend_for_you (title,jd_market,src,price,tags,jump_href,plus_price) values ('${title}','${jd_market}','${src}','${price}','${tags}','${jump_href}','${plus_price}')`;
       db(sql);
     }
   });
