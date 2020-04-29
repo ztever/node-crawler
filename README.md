@@ -20,3 +20,5 @@ yarn start 是启动 server 下面的 index
 node server/test 启动 test 服务
 
 node server/download 下载百度图片
+
+node server/getdata/home 爬取 jd 商城 home 页的数据，并写入到数据库中，需要链接数据库
