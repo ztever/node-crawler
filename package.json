@@ -17,6 +17,7 @@
     "nightmare": "^3.0.2",
     "nodemon": "^2.0.2",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "superagent": "^5.2.2"
   }
 }
