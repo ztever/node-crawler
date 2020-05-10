@@ -15,7 +15,6 @@ module.exports = (pageStart) =>
       .accept("application/json")
       .end((err, res) => {
         if (err) reject(err);
-        // console.log("res", JSON.parse(res.text));
-        resolve(res);
+        resolve(JSON.parse(res.text).subjects);
       });
   });

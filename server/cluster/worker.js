@@ -10,10 +10,14 @@ process.on("message", async (params) => {
   while (pageNum * (num + cpuIndex) <= maxPageStart) {
     let pageStart = pageNum * (num + cpuIndex);
     (async () => {
-      await spider(pageStart);
-      process.send(
-        `子进程 ${process.pid} 成功爬取日本动画第${(pageStart + 20) / 20}页数据`
-      );
+      const res = await spider(pageStart);
+      process.send({
+        msg: `子进程 ${process.pid} 成功爬取日本动画第${
+          (pageStart + 20) / 20
+        }页数据`,
+        res,
+        page: (pageStart + 20) / 20
+      });
     })();
     num += cpuNum;
   }
